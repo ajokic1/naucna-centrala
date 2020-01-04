@@ -1,0 +1,38 @@
+server:
+  port: 8102
+  ssl:
+    enabled: true
+    key-alias: nc-andrej
+    key-store: classpath:keystore.jks
+    key-store-password: 123456
+    key-store-type: JKS
+    trust-store: classpath:keystore.jks
+    trust-store-password: 123456
+security:
+  require-ssl: true
+http:
+  client:
+    ssl:
+      key-store: classpath:keystore.jks
+      key-store-password: 123456
+      trust-store: classpath:keystore.jks
+      trust-store-password: 123456
+
+spring:
+  application:
+    name: naucna-centrala-andrej
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+    show-sql: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false 
+  datasource:
+    url: jdbc:mysql://localhost:3306/nc-andrej?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
