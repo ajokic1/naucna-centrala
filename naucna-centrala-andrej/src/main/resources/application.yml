@@ -8,8 +8,8 @@ server:
     key-store-type: JKS
     trust-store: classpath:keystore.jks
     trust-store-password: 123456
-security:
-  require-ssl: true
+#security:
+#  require-ssl: true
 http:
   client:
     ssl:
@@ -33,6 +33,6 @@ spring:
     serialization:
       fail-on-empty-beans: false 
   datasource:
-    url: jdbc:mysql://localhost:3306/nc-andrej?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/ncandrej?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: root

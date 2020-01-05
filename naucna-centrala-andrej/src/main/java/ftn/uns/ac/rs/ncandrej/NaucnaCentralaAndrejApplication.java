@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.naucnacentralaandrej;
+package ftn.uns.ac.rs.ncandrej;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
