@@ -1,4 +1,4 @@
-ucpackage ftn.uns.ac.rs.ncandrej.config;
+package ftn.uns.ac.rs.ncandrej.config;
 
 import java.io.InputStream;
 import java.security.KeyStore;
