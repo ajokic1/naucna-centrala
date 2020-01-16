@@ -46,5 +46,7 @@ public class Journal {
 	@ManyToMany(mappedBy = "journals")
 	private List<Reviewer> reviewers;
 	
+	private boolean active;
+	
 	
 }

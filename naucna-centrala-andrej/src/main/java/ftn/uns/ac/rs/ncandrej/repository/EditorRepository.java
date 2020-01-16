@@ -7,5 +7,5 @@ import ftn.uns.ac.rs.ncandrej.model.Editor;
 
 @Repository
 public interface EditorRepository extends JpaRepository<Editor, Long>{
-	
+	public Editor findByUsername(String username);
 }

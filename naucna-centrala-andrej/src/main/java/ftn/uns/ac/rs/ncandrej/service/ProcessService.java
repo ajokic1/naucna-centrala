@@ -50,8 +50,6 @@ public class ProcessService {
         if (assignee != null) {
             builder.queryParam("assignee", assignee);
         }
-        
-        builder.queryParam("active", "true");
 
         ParameterizedTypeReference<List<TaskDto>> returnType = 
         		new ParameterizedTypeReference<List<TaskDto>>() {};
