@@ -156,7 +156,11 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="password" label="Password" type="string" />
+          <camunda:formField id="password" label="Password" type="string">
+            <camunda:properties>
+              <camunda:property id="password" value="true" />
+            </camunda:properties>
+          </camunda:formField>
           <camunda:formField id="address" label="Address" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
