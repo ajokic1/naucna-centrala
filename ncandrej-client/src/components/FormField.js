@@ -15,6 +15,7 @@ export default class FormField extends Component {
                     id={this.props.field.name} 
                     required={this.props.field.required}
                     value={this.props.value}
+                    checked={this.props.value}
                     onChange={this.props.handleChange}/>
             </div>
         );

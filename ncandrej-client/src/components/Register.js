@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import axioss from '../axioss';
 import FormField from './FormField';
-
+import { Redirect } from 'react-router-dom';
+ 
 export default class Register extends Component {
     constructor(props) {
         super(props)
         this.state = {
             processId: '',
-            task: null
+            task: null,
+            isComplete: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getTask = this.getTask.bind(this);
     }
     handleChange(event) {
-        this.setState({[event.target.name]: event.target.value});
+        if(event.target.type == 'checkbox')
+            this.setState({[event.target.name]: event.target.checked});
+        else this.setState({[event.target.name]: event.target.value});
     }
     handleSubmit() {
         let fields = [];
@@ -33,17 +37,22 @@ export default class Register extends Component {
         clearInterval(this.getTaskTimer);
     }
     getTask() {
-        console.log("tick");
         if(!this.state.task){
-            console.log("gotem");
             axioss.get('/user/register/process/' + this.state.processId)
             .then(json =>{
-                this.setState({task: json.data});
-                json.data.fields.map(field => this.setState({[field.name]: ''}));
+                if(json.data.taskId == 'process_ended')
+                    this.setState({isComplete: true});
+                else{
+                    this.setState({task: json.data});
+                    json.data.fields.map(field => this.setState({[field.name]: field.type=='boolean'?false:''}));    
+                }
+                
             });    
         }        
     }
     render() {
+        if(this.state.isComplete)
+            return <Redirect to='/'/>
         let fields;
         if(this.state.task){
             fields = this.state.task.fields.map(field => 
@@ -54,7 +63,6 @@ export default class Register extends Component {
                     handleChange={this.handleChange}/>
             );    
         }
-        
         return (
             <div className='container'>
                 <h1 className='mb-3'>Registracija novog korisnika</h1>
