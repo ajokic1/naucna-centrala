@@ -22,6 +22,10 @@ export default class Dashboard extends Component {
                 this.setState({processes: json.data});
             });
         this.loadTasks();
+        this.getTaskTimer = setInterval(this.loadTasks, 3000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.getTaskTimer);
     }
     loadTasks() {
         window.axioss.get('/process/tasks/user/'+this.props.user.username)

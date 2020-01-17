@@ -29,7 +29,10 @@ export default class ProcessView extends Component {
         let fields = [];
         this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name]}));
         window.axioss.post('/process/tasks/' + this.state.task.taskId, fields)
-            .then(() => {this.setState({task: null})});
+            .then(() => {
+                this.setState({task: null})
+                
+            });
     }
     handleSelect(selectedOption, target) {
         this.setState({[target.name]: selectedOption.value});
