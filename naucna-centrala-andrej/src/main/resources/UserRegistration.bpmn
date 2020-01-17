@@ -100,7 +100,7 @@
       <bpmn:incoming>SequenceFlow_19kxc2x</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0x9doy4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="regReviewerRole" name="Dodjela uloge recenzenta korisniku" camunda:class="${setUserAsReviewer}">
+    <bpmn:serviceTask id="regReviewerRole" name="Dodjela uloge recenzenta korisniku" camunda:delegateExpression="${setUserAsReviewer}">
       <bpmn:incoming>SequenceFlow_1ccyezo</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_10zbzzn</bpmn:outgoing>
     </bpmn:serviceTask>

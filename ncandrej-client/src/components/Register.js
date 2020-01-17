@@ -13,6 +13,7 @@ export default class Register extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getTask = this.getTask.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
     handleChange(event) {
         if(event.target.type == 'checkbox')
@@ -34,6 +35,9 @@ export default class Register extends Component {
     }
     componentWillUnmount() {
         clearInterval(this.getTaskTimer);
+    }
+    handleSelect(selectedOption, target) {
+        this.setState({[target.name]: selectedOption.value});
     }
     getTask() {
         if(!this.state.task){
@@ -59,7 +63,8 @@ export default class Register extends Component {
                     field={field} 
                     key={field.name} 
                     value={this.state[field.name]} 
-                    handleChange={this.handleChange}/>
+                    handleChange={this.handleChange}
+                    handleSelect={this.handleSelect}/>
             );    
         }
         return (
