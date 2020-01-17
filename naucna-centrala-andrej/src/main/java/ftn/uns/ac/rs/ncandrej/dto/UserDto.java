@@ -26,7 +26,6 @@ public class UserDto {
 	public UserDto(User user, String token) {
 		id=user.getId();
 		username=user.getUsername();
-		password=user.getPassword();
 		email=user.getEmail();
 		firstName=user.getFirstName();
 		lastName=user.getLastName();

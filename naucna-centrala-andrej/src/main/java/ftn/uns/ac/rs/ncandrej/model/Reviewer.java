@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="reviewer")
 public class Reviewer extends User {
 	
 	@ManyToMany

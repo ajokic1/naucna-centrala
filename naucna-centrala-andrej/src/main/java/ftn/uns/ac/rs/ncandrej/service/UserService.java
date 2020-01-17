@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ftn.uns.ac.rs.ncandrej.auth.JwtTokenUtil;
@@ -18,8 +19,10 @@ import ftn.uns.ac.rs.ncandrej.model.User;
 import ftn.uns.ac.rs.ncandrej.model.UserRole;
 import ftn.uns.ac.rs.ncandrej.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class UserService {
 	
 	@Autowired
@@ -37,16 +40,19 @@ public class UserService {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	public void registerUser(String username, String password, String email, String firstname, String lastname, 
 			String address, String city, String country) {
-		User user = new User(0, username, password, email, firstname, lastname, address, city, 
+		User user = new User(0, username, passwordEncoder.encode(password), email, firstname, lastname, address, city, 
 				country, false, UserRole.USER, false);
 		userRepo.save(user);
 		
-		org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser("username");
+		org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(username);
 		camundaUser.setFirstName(firstname);
-		camundaUser.setFirstName(lastname);
-		camundaUser.setPassword(password);
+		camundaUser.setLastName(lastname);
+		camundaUser.setPassword(passwordEncoder.encode(password));
 		camundaUser.setEmail(email);
 		identityService.saveUser(camundaUser);
 		
@@ -58,8 +64,8 @@ public class UserService {
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		
-		User user = userRepo.findByUsernameAndPassword(username, password);		
-		if(user==null) throw new RuntimeException("Wrong username and/or password");
+		log.info(passwordEncoder.encode(password));
+		User user = userRepo.findByUsername(username);		
 		
 		return new UserDto(user, token);
 	}

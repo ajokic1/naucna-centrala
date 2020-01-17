@@ -62,7 +62,21 @@ public class UserController {
 
 	@GetMapping("/register/process/{processId}")
 	public ResponseEntity<FormDataDto> getForm(@PathVariable String processId) {
-		Task task = taskService.createTaskQuery().processInstanceId(processId).list().get(0);
+		//Check if process ended
+		ProcessInstance pi = runtimeService.createProcessInstanceQuery()
+				.processInstanceId(processId).singleResult();
+		if(pi==null) {
+			FormDataDto response = new FormDataDto();
+			response.setTaskId("process_ended");
+			return ResponseEntity.ok(response);
+		}
+		//Get list of tasks
+		List<Task> tasks = taskService.createTaskQuery().processInstanceId(processId).list();
+		Task task;
+		if(tasks.size()>0)
+			task = tasks.get(0);
+		else
+			return ResponseEntity.ok().build();
 		TaskFormData formData = formService.getTaskFormData(task.getId());
 		List<FormFieldRequestDto> formFieldRequests = new ArrayList<>();
 		for(FormField formField: formData.getFormFields()) {
