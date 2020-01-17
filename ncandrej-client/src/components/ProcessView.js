@@ -10,6 +10,7 @@ export default class ProcessView extends Component {
         this.loadTask = this.loadTask.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
     loadTask() {
         this.props.loadTaskFalse();
@@ -27,8 +28,11 @@ export default class ProcessView extends Component {
     handleSubmit() {
         let fields = [];
         this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name]}));
-        window.axioss.post('/user/register/' + this.state.task.taskId, fields)
+        window.axioss.post('/process/tasks/' + this.state.task.taskId, fields)
             .then(() => {this.setState({task: null})});
+    }
+    handleSelect(selectedOption, target) {
+        this.setState({[target.name]: selectedOption.value});
     }
     render() {
         if(this.props.loadTask) this.loadTask();
@@ -39,13 +43,20 @@ export default class ProcessView extends Component {
                     field={field} 
                     key={field.name} 
                     value={this.state[field.name]} 
-                    handleChange={this.handleChange}/>
+                    handleChange={this.handleChange}
+                    handleSelect={this.handleSelect}/>
             );    
         }
         return (
             <div>
-                {this.state.task && fields}
-                {this.state.task && <div className='btn btn-primary' onClick={this.handleSubmit}>Submit</div>}
+                {this.state.task &&
+                <div>
+                    <h3>{this.state.task.taskName}</h3>
+                    {this.state.task.description && <p>{this.state.task.description}</p>}
+                    <hr/>
+                    {fields}
+                    <div className='btn btn-primary' onClick={this.handleSubmit}>Submit</div>
+                </div>}
             </div>
         );
     }

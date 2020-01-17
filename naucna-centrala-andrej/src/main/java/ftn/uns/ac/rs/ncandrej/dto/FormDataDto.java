@@ -13,5 +13,6 @@ public class FormDataDto {
 	private String taskName;
 	private String taskId;
     private List<FormFieldRequestDto> fields;
+    private String description;
 
 }

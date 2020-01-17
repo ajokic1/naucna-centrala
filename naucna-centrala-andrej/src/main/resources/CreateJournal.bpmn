@@ -9,13 +9,14 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="name" label="Ime casopisa" type="string" />
-          <camunda:formField id="numFields" label="Broj naucnih oblasti" type="string" />
+          <camunda:formField id="numFields" label="Broj naucnih oblasti" type="long" />
           <camunda:formField id="issn" label="ISSN" type="string" />
           <camunda:formField id="openAccess" label="Da li je casopis open access?" type="boolean" />
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${createFieldListHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0cbn4r7</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0uhfjgo</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0wzsruh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0w5c139</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0w5c139" sourceRef="Task_0vve8fz" targetRef="Task_0klnfy8" />
@@ -28,6 +29,7 @@
             </camunda:properties>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${inputScientificFieldHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0w5c139</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qb4gqe</bpmn:outgoing>
@@ -49,9 +51,10 @@
     <bpmn:userTask id="Task_164sc4m" name="Dodati urednike naucnih oblasti?" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="add_field_editors" type="boolean" />
+          <camunda:formField id="add_field_editors" label="Dodati urednike naucnih oblasti?" type="boolean" />
           <camunda:formField id="numEditors" label="Broj urednika" type="long" />
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${createEditorsListHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1w4k6sc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_15hcl35</bpmn:outgoing>
@@ -77,26 +80,41 @@
     <bpmn:userTask id="Task_0hy2ztv" name="Dodavanje urednika za naucne oblasti" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="editor" label="Urednik" type="string" />
+          <camunda:formField id="editor" label="Urednik" type="string">
+            <camunda:properties>
+              <camunda:property id="valuesUrl" value="/editors" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="editorField" label="Naucna oblast" type="string">
+            <camunda:properties>
+              <camunda:property id="valuesUrl" value="/fields" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${inputFieldEditorHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0a2qbzy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1kbd8ii</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">numEditors</bpmn:loopCardinality>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${numEditors}</bpmn:loopCardinality>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1ou02z4" sourceRef="ExclusiveGateway_015kpni" targetRef="Task_1rhpvu9" />
     <bpmn:userTask id="Task_1tz9shs" name="Dodavanje recenzenata" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="reviewer" label="Korisnicko ime recenzenta" type="string" />
+          <camunda:formField id="reviewer" label="Korisnicko ime recenzenta" type="string">
+            <camunda:properties>
+              <camunda:property id="valuesUrl" value="/reviewers" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${inputReviewerHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_19vqz8l</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0jaamht</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">numReviewers</bpmn:loopCardinality>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${numReviewers}</bpmn:loopCardinality>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0jaamht" sourceRef="Task_1tz9shs" targetRef="Task_0v5g9np" />
@@ -104,6 +122,7 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="needs_correction" label="Da li je potrebno ispraviti podatke?" type="boolean" />
+          <camunda:formField id="comment" label="Komentar" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0jaamht</bpmn:incoming>
@@ -126,18 +145,25 @@
       <bpmn:incoming>SequenceFlow_1kplsjw</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1kplsjw" sourceRef="Task_1m64r1k" targetRef="EndEvent_0ougzfe" />
-    <bpmn:sequenceFlow id="SequenceFlow_0uhfjgo" name="Da" sourceRef="ExclusiveGateway_097nlf2" targetRef="Task_0vve8fz">
+    <bpmn:sequenceFlow id="SequenceFlow_0uhfjgo" name="Da" sourceRef="ExclusiveGateway_097nlf2" targetRef="Task_0ooxrie">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needs_correction == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_19vqz8l" sourceRef="Task_1rhpvu9" targetRef="Task_1tz9shs" />
     <bpmn:userTask id="Task_1rhpvu9" name="Koliko recenzenata?" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="numReviewers" label="Broj recenzenata" type="long" />
+          <camunda:formField id="numReviewers" label="Broj recenzenata (min. 2)" type="long" />
         </camunda:formData>
+        <camunda:taskListener delegateExpression="${createReviewerListHandler}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1ou02z4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_19vqz8l</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0wzsruh" sourceRef="Task_0ooxrie" targetRef="Task_0vve8fz" />
+    <bpmn:userTask id="Task_0ooxrie" name="Potrebne ispravke" camunda:assignee="${initiator}">
+      <bpmn:documentation>Komentar administratora: ${comment}</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_0uhfjgo</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0wzsruh</bpmn:outgoing>
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -256,11 +282,10 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0uhfjgo_di" bpmnElement="SequenceFlow_0uhfjgo">
         <di:waypoint x="1760" y="222" />
-        <di:waypoint x="1760" y="280" />
-        <di:waypoint x="320" y="280" />
-        <di:waypoint x="320" y="237" />
+        <di:waypoint x="1760" y="310" />
+        <di:waypoint x="1630" y="310" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1711" y="262" width="15" height="14" />
+          <dc:Bounds x="1723" y="292" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_19vqz8l_di" bpmnElement="SequenceFlow_19vqz8l">
@@ -269,6 +294,14 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_1havlk5_di" bpmnElement="Task_1rhpvu9">
         <dc:Bounds x="1350" y="157" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0wzsruh_di" bpmnElement="SequenceFlow_0wzsruh">
+        <di:waypoint x="1530" y="310" />
+        <di:waypoint x="320" y="310" />
+        <di:waypoint x="320" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_06wyzcy_di" bpmnElement="Task_0ooxrie">
+        <dc:Bounds x="1530" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

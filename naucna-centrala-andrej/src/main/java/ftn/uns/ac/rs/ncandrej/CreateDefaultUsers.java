@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 import ftn.uns.ac.rs.ncandrej.model.Editor;
 import ftn.uns.ac.rs.ncandrej.model.Reviewer;
+import ftn.uns.ac.rs.ncandrej.model.ScientificField;
 import ftn.uns.ac.rs.ncandrej.model.User;
 import ftn.uns.ac.rs.ncandrej.model.UserRole;
 import ftn.uns.ac.rs.ncandrej.repository.EditorRepository;
 import ftn.uns.ac.rs.ncandrej.repository.ReviewerRepository;
+import ftn.uns.ac.rs.ncandrej.repository.ScientificFieldRepository;
 import ftn.uns.ac.rs.ncandrej.repository.UserRepository;
 
 @Component
@@ -33,8 +35,24 @@ public class CreateDefaultUsers implements ApplicationRunner {
 	@Autowired
 	IdentityService identityService; 
 	
+	@Autowired
+	ScientificFieldRepository fieldRepo;
+	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+		
+		//Naucne oblasti
+		if(fieldRepo.count()==0) {
+			String[] codes = {"MAT", "PHY", "AI", "CS", "SIG"};
+			String[] names = {"Matematika", "Fizika", "Umjetna inteligencija", "Racunarske nauke", "Obrada signala"};
+			ScientificField field;
+			for(int i=0; i<codes.length; i++) {
+				field = new ScientificField();
+				field.setCode(codes[i]);
+				field.setName(names[i]);
+				fieldRepo.save(field);				
+			}			
+		}
 		
 		//Admin user - kao camunda
 		if(userRepo.findByUsername("admin") == null) {

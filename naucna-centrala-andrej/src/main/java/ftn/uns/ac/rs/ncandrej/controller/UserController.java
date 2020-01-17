@@ -82,7 +82,7 @@ public class UserController {
 		for(FormField formField: formData.getFormFields()) {
 			formFieldRequests.add(new FormFieldRequestDto(formField));
 		}
-		return ResponseEntity.ok(new FormDataDto(task.getName(),task.getId(), formFieldRequests));
+		return ResponseEntity.ok(new FormDataDto(task.getName(),task.getId(), formFieldRequests, task.getDescription()));
 	}
 	
 	@PostMapping("/register/{taskId}")

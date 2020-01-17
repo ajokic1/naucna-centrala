@@ -87,7 +87,7 @@ public class ProcessService {
 			formFieldRequests.add(new FormFieldRequestDto(formField));
 		}
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		return new FormDataDto(task.getName(),task.getId(), formFieldRequests);
+		return new FormDataDto(task.getName(),task.getId(), formFieldRequests, task.getDescription());
 	}
 	
 	public String submitForm(String taskId, List<FormFieldDto> fields) {
