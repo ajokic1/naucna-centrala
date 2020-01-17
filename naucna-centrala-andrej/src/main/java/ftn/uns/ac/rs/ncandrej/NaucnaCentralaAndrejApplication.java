@@ -22,7 +22,7 @@ public class NaucnaCentralaAndrejApplication {
 	
 	private final ApplicationContext applicationContext;
 	
-    @Bean
+    /*@Bean
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -34,6 +34,6 @@ public class NaucnaCentralaAndrejApplication {
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
         return bean;
-    }
+    }*/
 
 }

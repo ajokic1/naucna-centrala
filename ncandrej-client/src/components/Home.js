@@ -5,7 +5,6 @@ export default class Home extends Component {
     render() {
         return (
             <div>
-                <Link to='/register'><div className='btn btn-primary'>Registracija</div></Link>
             </div>
         );
     }

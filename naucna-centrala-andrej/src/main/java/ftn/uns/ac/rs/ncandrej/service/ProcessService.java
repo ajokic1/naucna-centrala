@@ -1,6 +1,7 @@
 package ftn.uns.ac.rs.ncandrej.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.camunda.bpm.engine.FormService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ftn.uns.ac.rs.ncandrej.dto.FormDataDto;
+import ftn.uns.ac.rs.ncandrej.dto.FormFieldDto;
 import ftn.uns.ac.rs.ncandrej.dto.FormFieldRequestDto;
 import ftn.uns.ac.rs.ncandrej.dto.ProcessDefinitionDto;
 import ftn.uns.ac.rs.ncandrej.dto.TaskDto;
@@ -39,7 +41,7 @@ public class ProcessService {
 	private IdentityService identityService;
 	
 	public List<ProcessDefinitionDto> getProcessDefinitions() {
-		List<ProcessDefinition> definitions = repositoryService.createProcessDefinitionQuery().list();
+		List<ProcessDefinition> definitions = repositoryService.createProcessDefinitionQuery().latestVersion().list();
 		List<ProcessDefinitionDto> definitionDtos = new ArrayList<>();
 		for(ProcessDefinition definition: definitions) {
 			definitionDtos.add(new ProcessDefinitionDto(definition.getKey(), definition.getName(), definition.getDescription()));
@@ -86,6 +88,19 @@ public class ProcessService {
 		}
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		return new FormDataDto(task.getName(),task.getId(), formFieldRequests);
+	}
+	
+	public String submitForm(String taskId, List<FormFieldDto> fields) {
+		formService.submitTaskForm(taskId, fieldsToHashMap(fields));
+		return "Form submitted.";
+	}
+	
+	private HashMap<String, Object> fieldsToHashMap(List<FormFieldDto> fields) {
+		HashMap<String, Object> map = new HashMap<>();
+		for(FormFieldDto field: fields) {
+			map.put(field.getName(), field.getValue());
+		}
+		return map;
 	}
 	
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axioss from '../axioss';
+import { Link, Redirect } from 'react-router-dom';
 
 export default class Login extends Component {
     constructor(props) {
@@ -9,6 +8,7 @@ export default class Login extends Component {
             username:'',
             password:'',
             loggingIn: false,
+            redirect: false,
         }
         this.form = React.createRef();
         this.handleChange = this.handleChange.bind(this);
@@ -31,11 +31,12 @@ export default class Login extends Component {
             password: this.state.password,
         };
         this.setState({loggingIn: true});
-        axioss
+        window.axioss
             .post('/user/login', data)
             .then((json) => {
                 if(json.data.token) {
                     this.props.authSuccess(true, json.data);
+                    this.setState({redirect: true});
                 } else this.props.authSuccess(false, {});
 
             }).catch(error => {
@@ -44,6 +45,7 @@ export default class Login extends Component {
             });
     }
     render() {
+        if(this.state.redirect) return <Redirect to={this.props.requestedPath}/>;
         return (
             <div className='card shadow col-sm-9 col-md-7 col-lg-4 mx-auto my-5 px-5'>
                 <div className='card-body'>

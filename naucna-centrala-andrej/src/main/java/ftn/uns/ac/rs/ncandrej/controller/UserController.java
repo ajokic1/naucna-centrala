@@ -87,8 +87,6 @@ public class UserController {
 	
 	@PostMapping("/register/{taskId}")
 	public ResponseEntity<String> submitForm(@PathVariable String taskId, @RequestBody List<FormFieldDto> fields) {
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		String processInstanceId = task.getProcessInstanceId();
 		formService.submitTaskForm(taskId, fieldsToHashMap(fields));		
 		//processService.submitForm(taskId, fields);
 		return ResponseEntity.ok("Form submitted.");

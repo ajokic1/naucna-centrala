@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1qr1y94" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
-  <bpmn:process id="CreateJournal" name="Kreiranje novog casopisa" isExecutable="true" camunda:candidateStarterGroups="editor">
+  <bpmn:process id="CreateJournal" name="Novi casopis" isExecutable="true" camunda:candidateStarterGroups="editor">
     <bpmn:startEvent id="StartEvent_1" camunda:initiator="initiator">
       <bpmn:outgoing>SequenceFlow_0cbn4r7</bpmn:outgoing>
     </bpmn:startEvent>
@@ -32,7 +32,7 @@
       <bpmn:incoming>SequenceFlow_0w5c139</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qb4gqe</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${num_fields}</bpmn:loopCardinality>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${numFields}</bpmn:loopCardinality>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1qb4gqe" sourceRef="Task_0klnfy8" targetRef="Task_0jw8qi7" />

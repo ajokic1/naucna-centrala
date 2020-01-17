@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axioss from '../axioss';
 import FormField from './FormField';
 import { Redirect } from 'react-router-dom';
  
@@ -23,11 +22,11 @@ export default class Register extends Component {
     handleSubmit() {
         let fields = [];
         this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name]}));
-        axioss.post('/user/register/' + this.state.task.taskId, fields)
+        window.axioss.post('/user/register/' + this.state.task.taskId, fields)
             .then(() => {this.setState({task: null})});
     }
     componentDidMount() {
-        axioss.get('/user/register')
+        window.axioss.get('/user/register')
             .then(json => {
                 this.setState({processId: json.data});
             });
@@ -38,7 +37,7 @@ export default class Register extends Component {
     }
     getTask() {
         if(!this.state.task){
-            axioss.get('/user/register/process/' + this.state.processId)
+            window.axioss.get('/user/register/process/' + this.state.processId)
             .then(json =>{
                 if(json.data.taskId == 'process_ended')
                     this.setState({isComplete: true});
