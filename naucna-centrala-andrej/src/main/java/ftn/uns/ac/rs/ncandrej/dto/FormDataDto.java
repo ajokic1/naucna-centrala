@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FormDataDto {
+	private String taskName;
 	private String taskId;
-    private List<FormFieldDto> fields;
+    private List<FormFieldRequestDto> fields;
 
 }

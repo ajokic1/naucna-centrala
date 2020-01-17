@@ -7,4 +7,6 @@ import ftn.uns.ac.rs.ncandrej.model.Reviewer;
 
 @Repository
 public interface ReviewerRepository extends JpaRepository<Reviewer, Long> {
+	public Reviewer findByUsername(String username);
+	
 }

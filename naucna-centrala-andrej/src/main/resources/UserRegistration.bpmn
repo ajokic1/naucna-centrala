@@ -8,6 +8,9 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="field" label="Scientific field:" type="string">
+            <camunda:properties>
+              <camunda:property id="valuesUrl" value="/fields" />
+            </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -119,6 +122,9 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="firstName" label="Ime*" type="string">
+            <camunda:properties>
+              <camunda:property id="proba" value="probba" />
+            </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>

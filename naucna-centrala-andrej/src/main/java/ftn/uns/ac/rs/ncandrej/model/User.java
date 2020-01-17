@@ -46,4 +46,6 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	protected  UserRole role;
+	
+	protected boolean member;
 }

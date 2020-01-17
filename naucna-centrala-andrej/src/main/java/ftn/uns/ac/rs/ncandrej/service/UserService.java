@@ -40,7 +40,7 @@ public class UserService {
 	public void registerUser(String username, String password, String email, String firstname, String lastname, 
 			String address, String city, String country) {
 		User user = new User(0, username, password, email, firstname, lastname, address, city, 
-				country, false, UserRole.USER);
+				country, false, UserRole.USER, false);
 		userRepo.save(user);
 		
 		org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser("username");

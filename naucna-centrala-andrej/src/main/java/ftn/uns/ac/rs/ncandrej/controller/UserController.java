@@ -1,7 +1,16 @@
 package ftn.uns.ac.rs.ncandrej.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ftn.uns.ac.rs.ncandrej.dto.FormDataDto;
 import ftn.uns.ac.rs.ncandrej.dto.FormFieldDto;
+import ftn.uns.ac.rs.ncandrej.dto.FormFieldRequestDto;
 import ftn.uns.ac.rs.ncandrej.dto.LoginRequest;
 import ftn.uns.ac.rs.ncandrej.dto.UserDto;
-import ftn.uns.ac.rs.ncandrej.service.ProcessService;
 import ftn.uns.ac.rs.ncandrej.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +39,13 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private ProcessService processService;
+	private FormService formService;
+	
+	@Autowired
+	private RuntimeService runtimeService;
+	
+	@Autowired
+	TaskService taskService;
 	
 	@PostMapping("/login")
 	public UserDto login(@RequestBody LoginRequest loginRequest) throws Exception{
@@ -39,25 +54,37 @@ public class UserController {
 	
 	@GetMapping("/register")
 	public ResponseEntity<String> startRegistrationProcess() {
-		String processId = processService.startProcess("UserRegistration", null);
-		log.info("Process " + processId + " started.");
-		return ResponseEntity.ok(processId);				
+		ProcessInstance pi = runtimeService.startProcessInstanceByKey("UserRegistration");
+		//String processId = processService.startProcess("UserRegistration", null);
+		log.info("Process " + pi.getId() + " started.");
+		return ResponseEntity.ok(pi.getId());				
 	}
 
 	@GetMapping("/register/process/{processId}")
 	public ResponseEntity<FormDataDto> getForm(@PathVariable String processId) {
-		String taskId = processService
-				.getTasks(processId, "guest")
-				.stream()
-				.findFirst()
-				.get()
-				.getId();		
-		return ResponseEntity.ok(processService.getFormData(taskId));
+		Task task = taskService.createTaskQuery().processInstanceId(processId).list().get(0);
+		TaskFormData formData = formService.getTaskFormData(task.getId());
+		List<FormFieldRequestDto> formFieldRequests = new ArrayList<>();
+		for(FormField formField: formData.getFormFields()) {
+			formFieldRequests.add(new FormFieldRequestDto(formField));
+		}
+		return ResponseEntity.ok(new FormDataDto(task.getName(),task.getId(), formFieldRequests));
 	}
 	
 	@PostMapping("/register/{taskId}")
 	public ResponseEntity<String> submitForm(@PathVariable String taskId, @RequestBody List<FormFieldDto> fields) {
-		processService.submitForm(taskId, fields);
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String processInstanceId = task.getProcessInstanceId();
+		formService.submitTaskForm(taskId, fieldsToHashMap(fields));		
+		//processService.submitForm(taskId, fields);
 		return ResponseEntity.ok("Form submitted.");
+	}
+	
+	private HashMap<String, Object> fieldsToHashMap(List<FormFieldDto> fields) {
+		HashMap<String, Object> map = new HashMap<>();
+		for(FormFieldDto field: fields) {
+			map.put(field.getName(), field.getValue());
+		}
+		return map;
 	}
 }

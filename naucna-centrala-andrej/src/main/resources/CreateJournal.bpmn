@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1qr1y94" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
-  <bpmn:process id="Process_0ue774s" name="Kreiranje novog casopisa" isExecutable="true" camunda:candidateStarterGroups="editor">
+  <bpmn:process id="CreateJournal" name="Kreiranje novog casopisa" isExecutable="true" camunda:candidateStarterGroups="editor">
     <bpmn:startEvent id="StartEvent_1" camunda:initiator="initiator">
       <bpmn:outgoing>SequenceFlow_0cbn4r7</bpmn:outgoing>
     </bpmn:startEvent>
@@ -22,7 +22,11 @@
     <bpmn:userTask id="Task_0klnfy8" name="Unos naucnih oblasti" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="field" label="Naucna oblast:" type="string" />
+          <camunda:formField id="field" label="Naucna oblast:" type="string">
+            <camunda:properties>
+              <camunda:property id="valuesUrl" value="/fields" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0w5c139</bpmn:incoming>
@@ -73,8 +77,7 @@
     <bpmn:userTask id="Task_0hy2ztv" name="Dodavanje urednika za naucne oblasti" camunda:assignee="${initiator}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="editor1" label="Urednik 1:" type="string" />
-          <camunda:formField id="editor2" label="Urednik 2:" />
+          <camunda:formField id="editor" label="Urednik" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0a2qbzy</bpmn:incoming>
@@ -92,7 +95,9 @@
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_19vqz8l</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0jaamht</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true">
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">numReviewers</bpmn:loopCardinality>
+      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0jaamht" sourceRef="Task_1tz9shs" targetRef="Task_0v5g9np" />
     <bpmn:userTask id="Task_0v5g9np" name="Admin - provjera podataka" camunda:assignee="admin">
@@ -136,7 +141,7 @@
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0ue774s">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CreateJournal">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="179" width="36" height="36" />
       </bpmndi:BPMNShape>
