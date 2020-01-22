@@ -1,5 +1,7 @@
 package ftn.uns.ac.rs.ncandrej.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -41,6 +44,9 @@ public class User {
 	protected String city;
 	
 	protected String country;
+	
+	@ManyToMany(mappedBy="subscritpions")
+	protected List<Journal> subscribedJournals;
 	
 	protected boolean verified;
 	

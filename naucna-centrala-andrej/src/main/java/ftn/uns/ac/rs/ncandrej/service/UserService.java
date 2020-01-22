@@ -45,8 +45,18 @@ public class UserService {
 	
 	public void registerUser(String username, String password, String email, String firstname, String lastname, 
 			String address, String city, String country) {
-		User user = new User(0, username, passwordEncoder.encode(password), email, firstname, lastname, address, city, 
-				country, false, UserRole.USER, false);
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(passwordEncoder.encode(password));
+		user.setEmail(email);
+		user.setFirstName(firstname);
+		user.setLastName(lastname);
+		user.setAddress(address);
+		user.setCity(city);
+		user.setCountry(country);
+		user.setMember(false);
+		user.setRole(UserRole.USER);
+		user.setVerified(false);
 		userRepo.save(user);
 		
 		org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(username);

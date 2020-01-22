@@ -21,6 +21,9 @@ http:
 spring:
   application:
     name: naucna-centrala-andrej
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
   jpa:
     hibernate:
       ddl-auto: update
@@ -45,7 +48,12 @@ spring:
       mail:
         smtp:
           starttls.enable: true    
-    
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 50MB
+      max-request-size: 65MB
 camunda:
   bpm:
     admin-user:
@@ -60,5 +68,17 @@ camunda.bpm.webapp.index-redirect-enabled: false
 
 jwt:
   secret: ncandrej
+  
+kp:
+  urls:
+    payment: https://localhost:8080/transactions
+    registration: https://localhost:8080/sellers
+    methods: https://localhost:8080/methods
+    payment_front: https://localhost:4200/payment    
+file:
+  upload-dir: papers
+  
+baseUrl: https://localhost:8102
+frontBaseUrl: http://localhost:3000
 
     

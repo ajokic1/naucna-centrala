@@ -56,18 +56,15 @@ public class CreateDefaultUsers implements ApplicationRunner {
 		
 		//Admin user - kao camunda
 		if(userRepo.findByUsername("admin") == null) {
-			User admin = new User(0, 
-					"admin", 
-					passwordEncoder.encode("admin"), 
-					"aj.jokic+admin@gmail.com",
-					"Administrator", 
-					"", 
-					"", 
-					"", 
-					"", 
-					true, 
-					UserRole.ADMIN, 
-					true);
+			User admin = new User();
+			admin.setUsername("admin");
+			admin.setPassword(passwordEncoder.encode("admin"));
+			admin.setEmail("aj.jokic+admin@gmail.com");
+			admin.setFirstName("Administrator");
+			admin.setLastName("");
+			admin.setVerified(true);
+			admin.setMember(true);
+			admin.setRole(UserRole.ADMIN);
 			userRepo.save(admin);
 		}
 		//Reviewer

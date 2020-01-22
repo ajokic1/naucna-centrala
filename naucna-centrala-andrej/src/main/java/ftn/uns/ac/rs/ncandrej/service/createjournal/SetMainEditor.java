@@ -27,5 +27,6 @@ public class SetMainEditor implements JavaDelegate {
 		Journal journal = journalRepo.findByIssn((String) delegateExecution.getVariable("issn"));
 		Editor mainEditor = editorRepo.findByUsername((String) delegateExecution.getVariable("initiator"));
 		journal.setMainEditor(mainEditor);
+		journalRepo.save(journal);
 	}
 }

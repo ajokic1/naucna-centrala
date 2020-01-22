@@ -37,6 +37,9 @@ public class Paper {
 	@ManyToOne
 	private ScientificField field;
 	
+	@ManyToOne
+	private Journal journal;
+	
 	@OneToMany
 	private List<CoAuthor> coAuthors;
 	
@@ -50,6 +53,8 @@ public class Paper {
 	private List<Review> reviews;
 	
 	private String DOI;
+	
+	private String documentPath;
 	
 	
 }

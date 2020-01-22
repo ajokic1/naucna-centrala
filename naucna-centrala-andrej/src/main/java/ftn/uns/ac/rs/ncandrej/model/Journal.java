@@ -31,13 +31,15 @@ public class Journal {
 	
 	private String issn;
 	
+	private String sellerUuid;
+	
 	@Column(name="open_access")
 	private boolean openAccess;
 	
 	@ManyToMany(mappedBy = "journals")
 	private List<ScientificField> fields;
 	
-	@ManyToOne
+	@OneToOne
 	private Editor mainEditor;
 	
 	@OneToMany(mappedBy = "journal")
@@ -46,7 +48,15 @@ public class Journal {
 	@ManyToMany(mappedBy = "journals")
 	private List<Reviewer> reviewers;
 	
-	private boolean active;
+	@OneToMany(mappedBy = "journal")
+	private List<Paper> papers;
+	
+	@ManyToMany
+	private List<User> subscriptions;
+	
+	private boolean active = false;
+	
+	private boolean sellerRegistered = false;
 	
 	
 }
