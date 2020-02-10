@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import ftn.uns.ac.rs.ncandrej.model.User;
 import ftn.uns.ac.rs.ncandrej.repository.UserRepository;
 import ftn.uns.ac.rs.ncandrej.util.MailService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Named("notifyEditorsPaperSubmission")
+@Slf4j
 public class NotifyEditorsPaperSubmission implements JavaDelegate{
 	
 	@Autowired
@@ -28,6 +30,9 @@ public class NotifyEditorsPaperSubmission implements JavaDelegate{
 		
 		String journalName = (String) delegateExecution.getVariable("journalName");
 		String paperTitle = (String) delegateExecution.getVariable("title");
+		
+		log.info("AAAAAaa " + mainEditor.toString());
+		log.info("AAAAAaa " + mailService.toString());
 		
 		mailService.sendMail(mainEditor.getEmail(), journalName+" - New paper submission", 
 				"A new paper with the title\"" + paperTitle+"\" has been submitted to your journal.");

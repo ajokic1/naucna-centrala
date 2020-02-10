@@ -7,6 +7,7 @@ export default class FormField extends Component {
         this.state = {
             values: [],
         }
+        this.handleSelect = this.handleSelect.bind(this);
     }
     componentDidMount() {
         // if(this.props.field.properties.valuesUrl){
@@ -20,17 +21,26 @@ export default class FormField extends Component {
             this.props.handleSubmit(this.props.field.value);
         }
     } 
+    handleSelect(selectedOption, target) {
+        let field = this.props.field;
+        field.value.selectedValue = selectedOption.value;
+        this.props.handleSelect(target.name, field.value);
+    }
     render() {
         let type = 'text';
         if(this.props.field.properties.password) type='password';
         if(this.props.field.type == 'boolean') type='checkbox'; 
         
         let inputField;
-        if(this.props.field.properties.valuesUrl){
+        let options;
+        if(this.props.field.type=='List'){
+            options = Object.keys(this.props.field.value.options).map(key => ({
+                value: key, label: this.props.field.value.options[key]
+            }));
             inputField = (<Select
                 name={this.props.field.name}
-                options={this.props.field.value.options} 
-                onChange={this.props.handleSelect}/>);
+                options={options} 
+                onChange={this.handleSelect}/>);
         } else if (this.props.field.properties.redirectUrl) {
             inputField=(<p>Redirekcija...</p>);
         } else inputField=(

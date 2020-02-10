@@ -1,5 +1,6 @@
 package ftn.uns.ac.rs.ncandrej.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -22,7 +23,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="journal")
-public class Journal {
+public class Journal implements Serializable{
+	
+	private static final long serialVersionUID = -5624392923146771463L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

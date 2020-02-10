@@ -12,4 +12,6 @@ public class TaskDto {
 	private String processId;
 	private String name;
 	private String assignee;
+	
+	private String processName;
 }

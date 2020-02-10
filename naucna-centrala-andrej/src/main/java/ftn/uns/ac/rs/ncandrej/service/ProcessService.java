@@ -2,6 +2,7 @@ package ftn.uns.ac.rs.ncandrej.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.camunda.bpm.engine.FormService;
@@ -12,6 +13,7 @@ import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,7 @@ public class ProcessService {
 				.list();
 		return mapTasksToDtos(tasks);
 	}
+	
 	public List<TaskDto> getTasks(String username, String processId) {
 		List<Task> tasks = taskService
 				.createTaskQuery()
@@ -77,8 +80,9 @@ public class ProcessService {
 	private List<TaskDto> mapTasksToDtos(List<Task> tasks) {
 		List<TaskDto> taskDtos = new ArrayList<>();
 		for(Task task: tasks) {
+			ProcessDefinition pd = repositoryService.createProcessDefinitionQuery().processDefinitionId(task.getProcessDefinitionId()).singleResult();
 			taskDtos.add(new TaskDto(
-					task.getId(), task.getProcessInstanceId(), task.getName(), task.getAssignee()));
+					task.getId(), task.getProcessInstanceId(), task.getName(), task.getAssignee(), pd.getName()));
 		}
 		return taskDtos;
 	}
@@ -98,10 +102,14 @@ public class ProcessService {
 		return "Form submitted.";
 	}
 	
+	@SuppressWarnings("unchecked")
 	private HashMap<String, Object> fieldsToHashMap(List<FormFieldDto> fields) {
 		HashMap<String, Object> map = new HashMap<>();
 		for(FormFieldDto field: fields) {
-			map.put(field.getName(), field.getValue());
+			if(field.getType().equals("List")) 
+				map.put(field.getName(), (String)((LinkedHashMap<String, Object>) field.getValue()).get("selectedValue"));
+			else 
+				map.put(field.getName(), field.getValue());
 		}
 		return map;
 	}
@@ -112,6 +120,10 @@ public class ProcessService {
         	.setVariables(null)
         	.correlate();
         return true;
+	}
+	
+	public void deleteProcessInstance(String processId) throws Exception {
+		runtimeService.deleteProcessInstance(processId, null);
 	}
 	
 }

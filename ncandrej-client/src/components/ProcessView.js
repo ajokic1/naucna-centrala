@@ -11,6 +11,7 @@ export default class ProcessView extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.loadNextTask = this.loadNextTask.bind(this);
     }
     loadTask() {
         this.props.loadTaskFalse();
@@ -20,6 +21,14 @@ export default class ProcessView extends Component {
                 json.data.fields.map(field => this.setState({[field.name]: field.type=='boolean'?false:''}));
             });
     }
+    loadNextTask() {
+        this.props.loadTaskFalse();
+        window.axioss.get('/process/tasks/next/user/' + this.props.user.username + '/process/' + this.props.processId)
+            .then(json => {
+                this.setState({task: json.data});
+                json.data.fields.map(field => this.setState({[field.name]: field.type=='boolean'?false:''}));
+            })
+    }
     handleChange(event) {
         if(event.target.type == 'checkbox')
             this.setState({[event.target.name]: event.target.checked});
@@ -27,22 +36,24 @@ export default class ProcessView extends Component {
     }
     handleSubmit(redirectUrl) {
         let fields = [];
-        this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name]}));
+        this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name], type: field.type}));
         window.axioss.post('/process/tasks/' + this.state.task.taskId, fields)
             .then(() => {
                 this.setState({task: null})
                 if(redirectUrl) {
                     window.location.href = redirectUrl;
                 }
+                this.loadNextTask();
+                this.props.refreshTaskList();
             });
     }
-    handleSelect(selectedOption, target) {
-        this.setState({[target.name]: selectedOption.value});
+    handleSelect(name, value) {
+        this.setState({[name]: value});
     }
     render() {
         if(this.props.loadTask) this.loadTask();
         let fields;
-        if(this.state.task){
+        if(this.state.task && this.state.task.fields){
             fields = this.state.task.fields.map(field => 
                 <FormField 
                     field={field} 
@@ -54,7 +65,7 @@ export default class ProcessView extends Component {
             );    
         }
         return (
-            <div>
+            <div className='m-3'>
                 {this.state.task &&
                 <div>
                     <h3>{this.state.task.taskName}</h3>

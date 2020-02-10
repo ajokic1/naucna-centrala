@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class FormFieldDto {
 	private String name;
 	private Object value;
+	private String type;
 }

@@ -71,7 +71,11 @@ public class UserController {
 			return ResponseEntity.ok(response);
 		}
 		//Get list of tasks
-		List<Task> tasks = taskService.createTaskQuery().processInstanceId(processId).list();
+		List<Task> tasks = taskService
+				.createTaskQuery()
+				.taskAssignee("guest")
+				.processInstanceId(processId)
+				.list();
 		Task task;
 		if(tasks.size()>0)
 			task = tasks.get(0);

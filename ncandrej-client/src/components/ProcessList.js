@@ -12,7 +12,7 @@ export default class ProcessList extends Component {
         return (
             <div>
                 <h5 className='mt-2 mb-1'>Aktivnosti</h5>
-                <hr className='mt-0 mb-2'/>
+                <hr className='mt-0 mb-2 border-light'/>
                 {this.props.processes &&
                     processes
                 }

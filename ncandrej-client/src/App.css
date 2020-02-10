@@ -41,3 +41,7 @@
   color: darkgrey;
   cursor: pointer;
 }
+
+.bg-gray {
+  background: lightgrey;
+}
