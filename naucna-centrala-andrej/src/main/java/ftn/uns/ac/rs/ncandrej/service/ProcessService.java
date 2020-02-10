@@ -20,9 +20,12 @@ import ftn.uns.ac.rs.ncandrej.dto.FormDataDto;
 import ftn.uns.ac.rs.ncandrej.dto.FormFieldDto;
 import ftn.uns.ac.rs.ncandrej.dto.FormFieldRequestDto;
 import ftn.uns.ac.rs.ncandrej.dto.ProcessDefinitionDto;
+import ftn.uns.ac.rs.ncandrej.dto.RedirectFieldDto;
 import ftn.uns.ac.rs.ncandrej.dto.TaskDto;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ProcessService {
 	
 	@Autowired
@@ -101,6 +104,14 @@ public class ProcessService {
 			map.put(field.getName(), field.getValue());
 		}
 		return map;
+	}
+	
+	public Boolean dispatchMessage(String processId, String message) {
+        runtimeService.createMessageCorrelation(message)
+        	.processInstanceId(processId)
+        	.setVariables(null)
+        	.correlate();
+        return true;
 	}
 	
 }

@@ -64,7 +64,7 @@ public class SaveJournalData implements JavaDelegate {
 		journal.setFields(scFields);
 		journal.setMainEditor(mainEditor);
 		
-		registerInKp(journal);
+		//registerInKp(journal);
 		journalRepo.save(journal);		
 	}	
 	
@@ -74,7 +74,7 @@ public class SaveJournalData implements JavaDelegate {
 		List<String> paymentMethods = Arrays.asList(restTemplate.getForEntity("", String[].class).getBody());
 		
 		request.put("email", journal.getMainEditor().getEmail());
-		request.put("paymentMethods", paymentMethods);
+		//request.put("paymentMethods", paymentMethods);
 		request.put("uuid", journal.getSellerUuid());
 		request.put("amount", 5);
 		
@@ -83,9 +83,6 @@ public class SaveJournalData implements JavaDelegate {
 				.postForEntity(kpConfig.getUrls().get("registration"), request, Map.class)
 				.getBody();
 		if (((String)result.get("uuid")).equals(journal.getSellerUuid()))
-			journal.setSellerRegistered(true);
-			
-			
-		
+			journal.setSellerRegistered(true);		
 	}
 }

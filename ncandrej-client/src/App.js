@@ -7,6 +7,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
+import Journals from './components/Journals';
+import AddJournalSuccess from './components/AddJournalSuccess';
 
 export default class App extends Component {
     constructor(props){
@@ -14,6 +16,7 @@ export default class App extends Component {
         this.state={
             user:null,
             requestedPath: '/',
+            loading: true,
         }
         this.authSuccess = this.authSuccess.bind(this);
         this.logout = this.logout.bind(this);
@@ -24,6 +27,8 @@ export default class App extends Component {
         if (user) {
             user=JSON.parse(user);
             this.authSuccess(true, user);
+        } else {
+            this.setState({loading: false});
         }
     }
     logout() {
@@ -32,7 +37,7 @@ export default class App extends Component {
     }
     authSuccess(isSuccess, user){
         if(isSuccess){
-            this.setState({user: user});
+            this.setState({user: user, loading: false});
             localStorage["user"] = JSON.stringify(user);
             console.log('authsuccess');
             window.axioss.defaults.headers.common['Authorization'] = 
@@ -45,6 +50,7 @@ export default class App extends Component {
         this.setState({requestedPath});
     }
     render() {
+        if(this.state.loading) return (<p>Loading...</p>);
         return (
             <div className='h-100' style={{paddingTop: '3.5rem'}}>
                 <Router>
@@ -59,10 +65,15 @@ export default class App extends Component {
                         <Route path='/login'>
                             <Login requestedPath={this.requestedPath} authSuccess={this.authSuccess}/>
                         </Route>
-                        {this.state.user &&
-                            <Route>
-                                <Dashboard user={this.state.user} setRequestedPath={this.setRequestedPath}/>
-                            </Route>}
+                        <Route path='/dashboard'>
+                            <Dashboard user={this.state.user} setRequestedPath={this.setRequestedPath}/>
+                        </Route>
+                        <Route path='/journals'>
+                            <Journals user={this.state.user}/>
+                        </Route>
+                        <Route path='/add/magazine/success/:processId'>
+                            <AddJournalSuccess/>
+                        </Route>
                     </Switch>
                 </Router>
             </div>

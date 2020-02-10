@@ -21,9 +21,9 @@ http:
 spring:
   application:
     name: naucna-centrala-andrej
-#  cloud:
-#    config:
-#      uri: http://localhost:8888
+  cloud:
+    config:
+      uri: http://localhost:8888
   jpa:
     hibernate:
       ddl-auto: update
@@ -62,6 +62,20 @@ camunda:
       firstName: Admin
     filter:
       create: All tasks
+      
+#eureka:
+#  instance:
+#    nonSecurePortEnabled: false
+#    securePortEnabled: true
+#    securePort: 8102
+#    statusPageUrl: https://localhost:8102/info
+#    healthCheckUrl: https://localhost:8102/health
+#    homePageUrl: https://localhost:8102
+#  client:
+#    securePortEnabled: true
+#    serviceUrl:
+#      defaultZone: https://localhost:8761/eureka
+
 
 
 camunda.bpm.webapp.index-redirect-enabled: false
@@ -71,10 +85,12 @@ jwt:
   
 kp:
   urls:
-    payment: https://localhost:8080/transactions
-    registration: https://localhost:8080/sellers
-    methods: https://localhost:8080/methods
-    payment_front: https://localhost:4200/payment    
+    base: https://localhost:8080
+    payment: /transactions/
+    registration: /sellers/
+    methods: /methods/
+    payment_front: https://localhost:4000/payment
+    choose_payment_front: https://localhost:4000/choose/payment    
 file:
   upload-dir: papers
   

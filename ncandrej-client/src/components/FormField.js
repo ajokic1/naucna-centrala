@@ -9,13 +9,17 @@ export default class FormField extends Component {
         }
     }
     componentDidMount() {
-        if(this.props.field.properties.valuesUrl){
-            window.axioss.get(this.props.field.properties.valuesUrl)
-                .then(json => {
-                    this.setState({values: json.data});
-                });
+        // if(this.props.field.properties.valuesUrl){
+        //     window.axioss.get(this.props.field.properties.valuesUrl)
+        //         .then(json => {
+        //             this.setState({values: json.data});
+        //         });
+        // }
+        if(this.props.field.properties.redirectUrl){
+            this.setState({redirecting: this.props.field.name})
+            this.props.handleSubmit(this.props.field.value);
         }
-    }
+    } 
     render() {
         let type = 'text';
         if(this.props.field.properties.password) type='password';
@@ -25,8 +29,10 @@ export default class FormField extends Component {
         if(this.props.field.properties.valuesUrl){
             inputField = (<Select
                 name={this.props.field.name}
-                options={this.state.values} 
+                options={this.props.field.value.options} 
                 onChange={this.props.handleSelect}/>);
+        } else if (this.props.field.properties.redirectUrl) {
+            inputField=(<p>Redirekcija...</p>);
         } else inputField=(
             <input className='form-control'
                 type={type} 

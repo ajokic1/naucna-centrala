@@ -37,6 +37,7 @@ import ftn.uns.ac.rs.ncandrej.repository.JournalRepository;
 import ftn.uns.ac.rs.ncandrej.repository.PaperRepository;
 import ftn.uns.ac.rs.ncandrej.repository.PaperRequestRepository;
 import ftn.uns.ac.rs.ncandrej.repository.UserRepository;
+import ftn.uns.ac.rs.ncandrej.util.AES;
 
 @Service
 public class PaperService {
@@ -65,10 +66,10 @@ public class PaperService {
 	@Autowired
 	private JournalService journalService;
 	
-	@Value("baseUrl")
+	@Value("${baseUrl}")
 	private String baseUrl;
 	
-	@Value("frontBaseUrl")
+	@Value("${frontBaseUrl}")
 	private String frontBaseUrl;
 	
 	
@@ -125,7 +126,7 @@ public class PaperService {
 			order.setFailUrl(frontBaseUrl + "/fail");
 			//TODO: Handle bad response
 			OrderResponseDto response = restTemplate.postForEntity(
-					kpConfig.getUrls().get("payment"), 
+					kpConfig.getUrls().get("base") + kpConfig.getUrls().get("payment"), 
 					order, 
 					OrderResponseDto.class).getBody();
 			if(response == null) 

@@ -1,26 +1,36 @@
 package ftn.uns.ac.rs.ncandrej;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 public class NaucnaCentralaAndrejApplication {
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(NaucnaCentralaAndrejApplication.class, args);
 	}
 	
-	private final ApplicationContext applicationContext;
+	/*@Bean
+	public DiscoveryClient.DiscoveryClientOptionalArgs discoveryClientOptionalArgs() throws NoSuchAlgorithmException {
+		DiscoveryClient.DiscoveryClientOptionalArgs args = new DiscoveryClient.DiscoveryClientOptionalArgs();
+		System.setProperty("javax.net.ssl.keyStore", "src/main/resources/keystore.jks");
+		System.setProperty("javax.net.ssl.keyStorePassword", "123456");
+		System.setProperty("javax.net.ssl.trustStore", "src/main/resources/keystore.jks");
+		System.setProperty("javax.net.ssl.trustStorePassword", "123456");
+		EurekaJerseyClientImpl.EurekaJerseyClientBuilder builder = new EurekaJerseyClientImpl.EurekaJerseyClientBuilder();
+		builder.withClientName("kp");
+		builder.withSystemSSLConfiguration();
+		builder.withMaxTotalConnections(10);
+		builder.withMaxConnectionsPerHost(10);
+		args.setEurekaJerseyClient(builder.build());
+		return args;
+	}*/
+	
+	//private final ApplicationContext applicationContext;
 	
     /*@Bean
     public FilterRegistrationBean corsFilter() {

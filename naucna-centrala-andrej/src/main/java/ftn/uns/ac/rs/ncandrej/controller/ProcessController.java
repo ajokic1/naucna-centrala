@@ -54,4 +54,8 @@ public class ProcessController {
 	public ResponseEntity<String> getFormData(@PathVariable String taskId, @RequestBody List<FormFieldDto> fields) {
 		return ResponseEntity.ok(processService.submitForm(taskId, fields));
 	}
+	@PostMapping("/message/{processId}")
+	public ResponseEntity<Boolean> dispatchMessage(@PathVariable String processId, @RequestBody String message) {
+		return ResponseEntity.ok(processService.dispatchMessage(processId, message));
+	}
 }

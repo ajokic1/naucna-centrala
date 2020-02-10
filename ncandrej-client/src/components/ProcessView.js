@@ -25,13 +25,15 @@ export default class ProcessView extends Component {
             this.setState({[event.target.name]: event.target.checked});
         else this.setState({[event.target.name]: event.target.value});
     }
-    handleSubmit() {
+    handleSubmit(redirectUrl) {
         let fields = [];
         this.state.task.fields.map(field => fields.push({name: field.name, value: this.state[field.name]}));
         window.axioss.post('/process/tasks/' + this.state.task.taskId, fields)
             .then(() => {
                 this.setState({task: null})
-                
+                if(redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
             });
     }
     handleSelect(selectedOption, target) {
@@ -47,7 +49,8 @@ export default class ProcessView extends Component {
                     key={field.name} 
                     value={this.state[field.name]} 
                     handleChange={this.handleChange}
-                    handleSelect={this.handleSelect}/>
+                    handleSelect={this.handleSelect}
+                    handleSubmit={this.handleSubmit}/>
             );    
         }
         return (
@@ -58,7 +61,7 @@ export default class ProcessView extends Component {
                     {this.state.task.description && <p>{this.state.task.description}</p>}
                     <hr/>
                     {fields}
-                    <div className='btn btn-primary' onClick={this.handleSubmit}>Submit</div>
+                    <div className='btn btn-primary' onClick={()=>this.handleSubmit()}>Submit</div>
                 </div>}
             </div>
         );

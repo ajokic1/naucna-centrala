@@ -29,7 +29,7 @@ public class Paper {
 	
 	private String keywords;
 	
-	@Column(name = "pabstract")
+	@Column(name = "pabstract", length = 5000)
 	private String pAbstract;
 	
 	private String title;

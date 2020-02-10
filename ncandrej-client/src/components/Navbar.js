@@ -18,6 +18,9 @@ export default class Navbar extends Component {
                         <li className="nav-item active">
                             <Link to='/dashboard'><div className="nav-link" href="#">Dashboard</div></Link>
                         </li>
+                        <li className="nav-item active">
+                            <Link to='/journals'><div className="nav-link" href="#">Časopisi</div></Link>
+                        </li>
                         
                     </ul>
                     <AuthControls 

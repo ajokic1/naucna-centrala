@@ -45,7 +45,7 @@ public class User {
 	
 	protected String country;
 	
-	@ManyToMany(mappedBy="subscritpions")
+	@ManyToMany(mappedBy="subscriptions")
 	protected List<Journal> subscribedJournals;
 	
 	protected boolean verified;
