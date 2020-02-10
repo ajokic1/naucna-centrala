@@ -29,7 +29,9 @@ public class ChooseFieldEditor implements JavaDelegate {
 	
 	@Override
 	public void execute(DelegateExecution delegateExecution) throws Exception {
-		List<JournalEditor> fieldEditors = (ArrayList<JournalEditor>) delegateExecution.getVariable("fieldEditors");
+		String journalId = (String) delegateExecution.getVariable("journalId");
+		Journal journal = journalRepo.findById(Long.parseLong(journalId)).get();
+		List<JournalEditor> fieldEditors = journal.getFieldEditors();
 		ScientificField field = fieldRepo.findByCode((String) delegateExecution.getVariable("field"));
 		
 		String fieldEditor= (String) delegateExecution.getVariable("mainEditor");

@@ -31,9 +31,6 @@ public class NotifyEditorsPaperSubmission implements JavaDelegate{
 		String journalName = (String) delegateExecution.getVariable("journalName");
 		String paperTitle = (String) delegateExecution.getVariable("title");
 		
-		log.info("AAAAAaa " + mainEditor.toString());
-		log.info("AAAAAaa " + mailService.toString());
-		
 		mailService.sendMail(mainEditor.getEmail(), journalName+" - New paper submission", 
 				"A new paper with the title\"" + paperTitle+"\" has been submitted to your journal.");
 		mailService.sendMail(author.getEmail(), journalName+" - Paper submitted", 

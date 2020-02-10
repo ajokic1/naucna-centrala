@@ -189,7 +189,7 @@
       <bpmn:outgoing>SequenceFlow_0k0ysd9</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0k0ysd9" sourceRef="Task_1mfhc7f" targetRef="Task_0535aiz" />
-    <bpmn:serviceTask id="Task_0fftq5m" name="Učitavanje recenzenata za datu oblast" camunda:expression="${loadScientficFieldReviewers}">
+    <bpmn:serviceTask id="Task_0fftq5m" name="Učitavanje recenzenata za datu oblast" camunda:delegateExpression="${loadScientificFieldReviewers}">
       <bpmn:incoming>SequenceFlow_0isliso</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1kevhgc</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -221,7 +221,7 @@
     <bpmn:userTask id="Task_1x1n8ro" name="Unos roka za recenziju" camunda:assignee="${field_editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="reviewDeadline" label="Rok za recenziju:" type="date" />
+          <camunda:formField id="reviewDeadline" label="Rok za recenziju:" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0eivxdc</bpmn:incoming>
@@ -326,7 +326,7 @@
     <bpmn:userTask id="Task_1t5ub0d" name="Unos roka za recenziju">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="reviewDeadline" label="Rok za recenziju" type="date" />
+          <camunda:formField id="reviewDeadline" label="Rok za recenziju" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_15pfy0o</bpmn:incoming>

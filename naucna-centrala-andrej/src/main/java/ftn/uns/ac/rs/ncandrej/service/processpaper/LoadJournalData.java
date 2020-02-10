@@ -24,6 +24,7 @@ public class LoadJournalData implements JavaDelegate{
 		Journal journal = journalRepo.findById(Long.parseLong(journalId)).get();
 		delegateExecution.setVariable("openAccess", journal.isOpenAccess());
 		delegateExecution.setVariable("journalName", journal.getName());
+		delegateExecution.setVariable("mainEditor", journal.getMainEditor().getUsername());
 		//delegateExecution.setVariable("journalFields", );
 		delegateExecution.setVariable("issn", journal.getIssn());
 		//delegateExecution.setVariable("fieldEditors", journal.getFieldEditors());
